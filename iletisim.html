@@ -1,32 +1,52 @@
 <!DOCTYPE html>
-<html>
+<html lang="tr">
     <head>
         <meta charset="utf-8">
         <title>Taha Efe's Personal Webpage</title>
-        <meta name="description" content="Taha Efe'nin Kişisel Web Sitesi, Taha Efe's personal webpage">
-        <meta name="keywords" content="taha,efe,web,computer,engineer,ingenieur,bilgisayar,mühendis">
+        <meta name="description" content="Taha Efe's Personal Webpage. Computer Engineer, Ankara University">
+        <meta name="keywords" content="Taha Efe,Personal, Webpage,Computer,Engineer,Ingenieur,Html,css,machine,learning,object,detection,ankara,university,üniversitesi">
+        <link rel="stylesheet" href="style.css">
+
     </head>
     <body>
-        <nav>
-            <center>
-            <h1>Taha Efe</h1>
-            <a href="index.html">Anasayfa</a>
-            <a href="cv.html">Özgeçmiş</a>
-            <a href="projeler.html">Projeler</a>
-            <a href="iletisim.html">İletişim</a>
-            <br>
-            <hr>
-            <h2>Adres:</h2>
-            <p>Cumhuriyet Meydanı.
+        <div id="sayfa">
+            <header id="banner">
+                <div id="logo">
+                    <a href="#"><img id="vesika" src="resimler/kirpilmis.jpg" alt="Taha Efe" title="Taha Efe"></a>
+                    
+                </div>
+                <div id="sosyal">
+                    <a href="#"><img id="ikon" src="resimler/linkedin.png" alt="linkedin"></a>
+                    <a href="#"><img id="ikon" src="resimler/twitter.png" alt="linkedin"></a>
+                    <a href="#"><img id="ikon" src="resimler/instagram.png" alt="linkedin"></a>
+                </div>
+            </header>
+            <nav id="anamenu">
+                <ul>
+                    <li><a href="index.html">Anasayfa</a></li>
+                    <li><a href="ozgecmis.html">Özgeçmiş</a></li>
+                    <li><a href="projeler.html">Projeler</a></li>
+                    <li><a href="iletisim.html">İletişim</a></li>
+                </ul>
+            </nav>
+            <article id="icerik">
+                <img class="resim" src="resimler/logo-ankara.png" alt="fotograf" title="Türk Bayrağı">
+                <h1 class="baslik">Taha Efe</h1>
+                    <br>
+                <h2 class="basliki">Adres:</h2>
+            <p class="metini">Cumhuriyet Meydanı.
                 <br>
                 Bafra / SAMSUN
             </p>
-            <h2>Telefon: </h2>
-            <p>0555 555 ** **</p>
-            <h2>Email:</h2>
-            <p>tahaefe55@yaanimail.com</p>
+            <br>
+            <h2 class="basliki">Telefon: </h2>
+            <p class="metini">0555 555 ** **</p>
+            <br>
+            <h2 class="basliki">Email:</h2>
+            <p class="metini">tahaefe55@yaanimail.com</p>
+            <br>
             <hr>
-            <h2>Mesajınız</h2>
+            <h2 class="basliki">Mesajınız</h2>
             <br>
             <form name="email" accept="email.php" method="GET">
                 <table>
@@ -37,5 +57,35 @@
                     <tr><td></td><td><input type="submit"><input type="reset"></td></tr>
                 </table>
             </form>
-            <br>
-            <hr>
+                
+            </article>
+            <aside id="yanmenu">
+                <img id="yanvesika" src="resimler/profil.jpeg" alt="Profil-resmi">
+                <h1 class="baslikyan">Doğum:</h1>
+                <p>09/11/1998
+                    <br>
+                    Bafra,Samsun
+                    Türkiye
+                </p>
+                    
+               <h1 class="baslikyan"> Milliyet:</h1>
+               <p>Türk</p>
+                    
+                <h1 class="baslikyan">Eğitim:</h1>
+                <p>Ankara Üniversitesi
+                    <br>
+                    Bilgisayar 
+                    Mühendisliği
+                </p>
+            </aside>
+            <footer id="altmenu">
+                    <a href="index.html">Anasayfa</a>
+                    <a href="ozgecmis.html">Özgeçmiş</a>
+                    <a href="projeler.html">Projeler</a>
+                    <a href="iletisim.html">İletişim</a>
+                    <br>
+                    <p class="kucukmetin">Tüm Hakları Saklıdır.</p>
+            </footer>
+        </div>
+    </body>
+</html>

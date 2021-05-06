@@ -1,0 +1,235 @@
+/* CSS Dosyası*/
+
+/* Boşlukları Sıfırla */
+
+*{
+    margin: 0px;
+    padding: 0px;
+}
+
+#sayfa{
+    width: 900px;
+    min-height: 600px;
+    border-style: solid;
+    border-width: 1px;
+    margin: auto;
+    overflow: auto;
+}
+
+/*Banner*/
+#banner{
+    width: 898px;
+    min-height: 100px;
+    border-style: dotted;
+    border-width: 1px;
+    background-color: rgb(12, 12, 12);
+    margin: auto;
+}
+
+/* Logo*/
+#logo{
+    width: 80px;
+    min-height: 80px;
+    border-style: none;
+    border-width: 1px;
+    background-color: #f2f0f0ef; /*blanchedalmond;*/
+    border-radius: 10px;
+    position: relative;
+    top: 10px;
+    left: 10px;
+    float: left;
+}
+
+#vesika{
+    width: 80px;
+
+}
+
+/* Sosyal Medya ikonları */
+#sosyal{
+    width: 180px;
+    min-height: 24px;
+    border-style: none;
+    border-width: 1px;
+    
+    float: right;
+    position: relative;
+    top: 70px;
+    right: 6px;
+}
+
+#ikon{
+    height: 24px;
+    float: right;
+    margin-left: 10px;
+}
+
+/* AnaMenü */
+#anamenu{
+    width: 898px;
+    min-height: 50px;
+    border-style: dotted;
+    border-width: 1px;
+    background-color:#261C1E; /*#593F4E;*/
+    margin: auto;
+}
+
+#anamenu ul {
+    list-style-type: none;
+}
+
+#anamenu ul li{
+    width: 80px;
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 8px;
+    border-color: darkgray;
+    background-color: honeydew;
+    float: left;
+    padding: 4px;
+    margin-left: 10px;
+    position: relative;
+    top: 10px;
+    text-align: center;
+}
+
+#anamenu ul a{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#anamenu ul a:link{
+    color: #261C1E;
+}
+
+#anamenu ul a:visited{
+    color: darkred;
+}
+
+#anamenu ul a:hover{
+    color: #593F4E;
+    text-decoration: underline;
+    font-size: 16px;
+}
+
+#anamenu ul a:active{
+    color: firebrick;
+    
+}
+
+/* İçerik ve Yanmenu Kodları */
+
+#icerik{
+    width: 600px;
+    height: 550px;
+    border-style: dotted;
+    border-width: 1px;
+    background-color: #F2F0F0;
+    float: left;
+    overflow: auto;
+}
+
+#yanmenu{
+    width: 296px;
+    height: 550px;
+    border-style: dotted;
+    border-width: 1px;
+    background-color: rgb(25, 16, 17);
+    float: left;
+    color: #0D0D0B;
+    
+}
+
+#yanvesika{
+    width: 294px;
+    height: 400px;
+}
+
+#yanmenu p{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    color: #593F4E;
+}
+.resim{
+   /* position: relative;
+    width: 120px;
+    margin: 4px;*/
+    width: 100px;
+    
+    border-style: none;
+    
+    
+    
+    position: relative;
+    text-align: center;
+}
+
+.metin{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    color: #261c1e98;
+    margin: auto;
+    padding: 3px;
+    
+}
+
+.metini{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    color: #261c1e98;
+    margin: auto;
+    padding: 3px;
+    text-align: center;
+}
+
+.baslik{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 24px;
+    color: #261C1E;
+    text-align: center;
+}
+
+.basliki{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 20px;
+    color: #261C1E;
+    text-align: center;
+}
+
+.baslikyan{
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    font-size: 16px;
+    color: #f2f0f0e1;
+}
+
+/* ALT MENÜ */
+#altmenu{
+    width: 898px;
+    min-height: 42px;
+    border-style: dotted;
+    border-width: 1px;
+    background-color: #593F4E;
+    float: left;
+    text-align: center;
+    color: rgb(12, 12, 12);
+}
+
+#altmenu a{
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 10px;
+    font-weight: bolder;
+    color: rgb(12, 12, 12);
+    text-decoration: none;
+}
+
+#altmenu a:hover{
+    color: rgb(131, 17, 17);
+    text-decoration: underline;
+}
+
+.kucukmetin{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 10px;
+}
