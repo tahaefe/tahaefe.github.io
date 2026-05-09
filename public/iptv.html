@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IPTV Player</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1a1a26;
+    --border: #2a2a3e;
+    --accent: #e63946;
+    --accent2: #ff6b6b;
+    --text: #f0f0f8;
+    --muted: #888899;
+    --sidebar: 320px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ── TOP BAR ── */
+  #topbar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 20px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    z-index: 10;
+    flex-shrink: 0;
+  }
+
+  .logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--accent);
+    text-shadow: 0 0 20px rgba(230,57,70,0.5);
+  }
+
+  .logo span { color: var(--text); }
+
+  #url-bar {
+    flex: 1;
+    display: flex;
+    gap: 8px;
+  }
+
+  #playlist-url {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 8px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    outline: none;
+    transition: border-color .2s;
+  }
+  #playlist-url:focus { border-color: var(--accent); }
+  #playlist-url::placeholder { color: var(--muted); }
+
+  .btn {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background .2s, transform .1s;
+    white-space: nowrap;
+  }
+  .btn:hover { background: var(--accent2); transform: scale(1.03); }
+  .btn.ghost {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .btn.ghost:hover { border-color: var(--accent); color: var(--accent); background: transparent; }
+
+  #file-label {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: border-color .2s, color .2s;
+    white-space: nowrap;
+  }
+  #file-label:hover { border-color: var(--accent); color: var(--text); }
+  #file-input { display: none; }
+
+  /* ── MAIN LAYOUT ── */
+  #main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ── SIDEBAR ── */
+  #sidebar {
+    width: var(--sidebar);
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  #search-wrap {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  #search {
+    width: 100%;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 8px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    outline: none;
+  }
+  #search:focus { border-color: var(--accent); }
+  #search::placeholder { color: var(--muted); }
+
+  #groups {
+    display: flex;
+    gap: 6px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    flex-shrink: 0;
+    scrollbar-width: none;
+  }
+  #groups::-webkit-scrollbar { display: none; }
+
+  .group-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 12px;
+    color: var(--muted);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all .2s;
+  }
+  .group-chip.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+  }
+
+  #channel-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 8px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  .channel-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background .15s;
+    border: 1px solid transparent;
+  }
+  .channel-item:hover { background: var(--surface2); }
+  .channel-item.active {
+    background: rgba(230,57,70,.12);
+    border-color: rgba(230,57,70,.3);
+  }
+
+  .ch-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--muted);
+    flex-shrink: 0;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .ch-logo img { width: 100%; height: 100%; object-fit: contain; }
+
+  .ch-info { flex: 1; min-width: 0; }
+  .ch-name {
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .ch-group { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+  .ch-num {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 1px;
+  }
+
+  /* ── PLAYER AREA ── */
+  #player-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #video-wrap {
+    flex: 1;
+    background: #000;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+  }
+
+  #placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    color: var(--muted);
+  }
+  .ph-icon {
+    font-size: 64px;
+    opacity: .3;
+  }
+  .ph-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 3px;
+    color: var(--text);
+    opacity: .3;
+  }
+  .ph-sub { font-size: 13px; opacity: .4; text-align: center; line-height: 1.6; }
+
+  /* ── NOW PLAYING BAR ── */
+  #now-playing {
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+
+  .live-badge {
+    background: var(--accent);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: .6; }
+  }
+
+  #np-name {
+    font-weight: 600;
+    font-size: 15px;
+    flex: 1;
+  }
+  #np-url {
+    font-size: 11px;
+    color: var(--muted);
+    max-width: 300px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  #controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .ctrl-btn {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all .2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .ctrl-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+  #vol-slider {
+    -webkit-appearance: none;
+    width: 80px;
+    height: 4px;
+    border-radius: 2px;
+    background: var(--border);
+    outline: none;
+    cursor: pointer;
+  }
+  #vol-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    cursor: pointer;
+  }
+
+  /* ── LOADING ── */
+  #loading {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,.8);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text);
+    z-index: 5;
+  }
+  #loading.show { display: flex; }
+  .spinner {
+    width: 36px;
+    height: 36px;
+    border: 3px solid var(--border);
+    border-top-color: var(--accent);
+    border-radius: 50%;
+    animation: spin .8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── ERROR TOAST ── */
+  #toast {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    background: #1a1020;
+    border: 1px solid var(--accent);
+    color: var(--text);
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 13px;
+    max-width: 300px;
+    transform: translateY(20px);
+    opacity: 0;
+    transition: all .3s;
+    z-index: 100;
+    pointer-events: none;
+  }
+  #toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ── EMPTY ── */
+  #empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+    color: var(--muted);
+    padding: 40px 20px;
+    text-align: center;
+  }
+  #empty .ei { font-size: 40px; opacity: .3; }
+  #empty p { font-size: 13px; line-height: 1.6; }
+
+  /* ── SCROLLBAR ── */
+  #channel-list::-webkit-scrollbar { width: 4px; }
+  #channel-list::-webkit-scrollbar-track { background: transparent; }
+  #channel-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* ── INFO PANEL (top overlay) ── */
+  #info-overlay {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    background: rgba(10,10,15,.85);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 12px 16px;
+    backdrop-filter: blur(12px);
+    display: none;
+    z-index: 4;
+  }
+  #info-overlay.show { display: block; }
+  #info-ch { font-family: 'Bebas Neue', sans-serif; font-size: 22px; letter-spacing: 2px; }
+  #info-grp { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* ── FULLSCREEN ── */
+  #video-wrap:fullscreen { background: #000; }
+  #video-wrap:fullscreen #video { width: 100vw; height: 100vh; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div class="logo">IPTV<span>Pro</span></div>
+  <div id="url-bar">
+    <input id="playlist-url" type="text" placeholder="M3U playlist URL girin (http://...)" />
+    <button class="btn" onclick="loadFromURL()">▶ Yükle</button>
+    <label id="file-label" for="file-input">📁 Dosya</label>
+    <input id="file-input" type="file" accept=".m3u,.m3u8" onchange="loadFromFile(this)" />
+    <button class="btn ghost" onclick="loadDemo()">Demo</button>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div id="main">
+
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div id="search-wrap">
+      <input id="search" type="text" placeholder="🔍 Kanal ara..." oninput="filterChannels()" />
+    </div>
+    <div id="groups"></div>
+    <div id="channel-list">
+      <div id="empty">
+        <div class="ei">📡</div>
+        <p>Playlist yüklemek için üstteki URL kutusunu kullanın veya M3U dosyası seçin.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAYER -->
+  <div id="player-area">
+    <div id="video-wrap">
+      <div id="placeholder">
+        <div class="ph-icon">📺</div>
+        <div class="ph-title">Kanal Seçin</div>
+        <div class="ph-sub">Sol taraftan bir kanal seçerek<br>yayını başlatın.</div>
+      </div>
+      <video id="video" style="display:none" controls autoplay></video>
+      <div id="loading"><div class="spinner"></div><span>Yükleniyor...</span></div>
+      <div id="info-overlay">
+        <div id="info-ch"></div>
+        <div id="info-grp"></div>
+      </div>
+    </div>
+
+    <div id="now-playing" style="display:none">
+      <span class="live-badge">● CANLI</span>
+      <div>
+        <div id="np-name">—</div>
+        <div id="np-url">—</div>
+      </div>
+      <div id="controls" style="margin-left:auto;display:flex;gap:8px;align-items:center">
+        <button class="ctrl-btn" onclick="prevChannel()">⏮ Önceki</button>
+        <button class="ctrl-btn" onclick="toggleMute()">🔇 Ses</button>
+        <input id="vol-slider" type="range" min="0" max="1" step="0.05" value="1" oninput="setVolume(this.value)" />
+        <button class="ctrl-btn" onclick="nextChannel()">Sonraki ⏭</button>
+        <button class="ctrl-btn" onclick="toggleFullscreen()">⛶ Tam Ekran</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.7/hls.min.js"></script>
+<script>
+let channels = [];
+let filtered = [];
+let groups = ['Tümü'];
+let activeGroup = 'Tümü';
+let currentIndex = -1;
+let hls = null;
+let infoTimer = null;
+
+/* ─── PARSE M3U ─── */
+function parseM3U(text) {
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  const result = [];
+  let current = null;
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (line.startsWith('#EXTINF')) {
+      current = { name: '', group: 'Diğer', logo: '', url: '' };
+      const nameMatch = line.match(/,(.+)$/);
+      if (nameMatch) current.name = nameMatch[1].trim();
+      const grpMatch = line.match(/group-title="([^"]*)"/i);
+      if (grpMatch) current.group = grpMatch[1].trim() || 'Diğer';
+      const logoMatch = line.match(/tvg-logo="([^"]*)"/i);
+      if (logoMatch) current.logo = logoMatch[1].trim();
+    } else if (line.startsWith('http') || line.startsWith('rtmp') || line.startsWith('rtsp')) {
+      if (current) {
+        current.url = line;
+        result.push(current);
+        current = null;
+      }
+    }
+  }
+  return result;
+}
+
+/* ─── CORS PROXIES ─── */
+const PROXIES = [
+  url => url,                                                          // doğrudan
+  url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+  url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+  url => `https://proxy.cors.sh/${url}`,
+  url => `https://cors-anywhere.herokuapp.com/${url}`,
+];
+
+async function fetchWithProxy(url) {
+  for (let i = 0; i < PROXIES.length; i++) {
+    try {
+      const proxyUrl = PROXIES[i](url);
+      const res = await fetch(proxyUrl, { signal: AbortSignal.timeout(8000) });
+      if (!res.ok) continue;
+      const text = await res.text();
+      if (text.includes('#EXTM3U') || text.includes('#EXTINF')) {
+        if (i > 0) showToast(`✅ Proxy #${i} ile yüklendi`);
+        return text;
+      }
+    } catch (e) { /* sonraki proxy */ }
+  }
+  throw new Error('Tüm proxy\'ler başarısız');
+}
+
+/* ─── LOAD FROM URL ─── */
+async function loadFromURL() {
+  const url = document.getElementById('playlist-url').value.trim();
+  if (!url) { showToast('Lütfen bir URL girin'); return; }
+  showLoading(true);
+  try {
+    const text = await fetchWithProxy(url);
+    processPlaylist(text);
+  } catch (e) {
+    showToast('❌ Playlist yüklenemedi. Lütfen M3U dosyasını indirip "Dosya" butonuyla yükleyin.');
+  } finally {
+    showLoading(false);
+  }
+}
+
+/* ─── LOAD FROM FILE ─── */
+function loadFromFile(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => processPlaylist(e.target.result);
+  reader.readAsText(file);
+}
+
+/* ─── PROCESS PLAYLIST ─── */
+function processPlaylist(text) {
+  channels = parseM3U(text);
+  if (!channels.length) { showToast('Playlist boş veya geçersiz format'); return; }
+
+  const grpSet = new Set(channels.map(c => c.group));
+  groups = ['Tümü', ...Array.from(grpSet).sort()];
+  activeGroup = 'Tümü';
+
+  renderGroups();
+  filterChannels();
+  showToast(`✅ ${channels.length} kanal yüklendi`);
+}
+
+/* ─── DEMO ─── */
+function loadDemo() {
+  const demo = `#EXTM3U
+#EXTINF:-1 tvg-logo="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b7/TRT_1_logo_%282023%29.svg/240px-TRT_1_logo_%282023%29.svg.png" group-title="Ulusal",TRT 1
+https://trtcanlitv.com/playlist/trt1.m3u8
+#EXTINF:-1 group-title="Ulusal",TRT Haber
+https://trtcanlitv.com/playlist/trthaber.m3u8
+#EXTINF:-1 group-title="Ulusal",Show TV
+https://showtv-live.daioncdn.net/showtv/showtv.m3u8
+#EXTINF:-1 group-title="Haber",CNN Türk
+https://stream.cnntv.com.tr/cnntv/cnntv.m3u8
+#EXTINF:-1 group-title="Spor",beIN Sports 1
+https://cdn-pull.digiturk.com.tr/beinsports1/bein1.m3u8
+#EXTINF:-1 group-title="Çocuk",TRT Çocuk
+https://trtcanlitv.com/playlist/trtcocuk.m3u8`;
+  processPlaylist(demo);
+  showToast('Demo playlist yüklendi (akışlar test amaçlıdır)');
+}
+
+/* ─── RENDER GROUPS ─── */
+function renderGroups() {
+  const el = document.getElementById('groups');
+  el.innerHTML = '';
+  groups.forEach(g => {
+    const chip = document.createElement('div');
+    chip.className = 'group-chip' + (g === activeGroup ? ' active' : '');
+    chip.textContent = g;
+    chip.onclick = () => { activeGroup = g; renderGroups(); filterChannels(); };
+    el.appendChild(chip);
+  });
+}
+
+/* ─── FILTER ─── */
+function filterChannels() {
+  const q = document.getElementById('search').value.toLowerCase();
+  filtered = channels.filter(c => {
+    const matchGroup = activeGroup === 'Tümü' || c.group === activeGroup;
+    const matchSearch = !q || c.name.toLowerCase().includes(q) || c.group.toLowerCase().includes(q);
+    return matchGroup && matchSearch;
+  });
+  renderChannelList();
+}
+
+/* ─── RENDER CHANNEL LIST ─── */
+function renderChannelList() {
+  const list = document.getElementById('channel-list');
+  if (!filtered.length) {
+    list.innerHTML = '<div id="empty"><div class="ei">🔍</div><p>Kanal bulunamadı.</p></div>';
+    return;
+  }
+  list.innerHTML = '';
+  filtered.forEach((ch, i) => {
+    const origIdx = channels.indexOf(ch);
+    const item = document.createElement('div');
+    item.className = 'channel-item' + (origIdx === currentIndex ? ' active' : '');
+    item.innerHTML = `
+      <div class="ch-logo">
+        ${ch.logo ? `<img src="${ch.logo}" onerror="this.parentElement.textContent='📺'" />` : '📺'}
+      </div>
+      <div class="ch-info">
+        <div class="ch-name">${escHtml(ch.name)}</div>
+        <div class="ch-group">${escHtml(ch.group)}</div>
+      </div>
+      <div class="ch-num">${String(origIdx+1).padStart(2,'0')}</div>`;
+    item.onclick = () => playChannel(origIdx);
+    list.appendChild(item);
+  });
+}
+
+/* ─── PLAY ─── */
+function playChannel(idx) {
+  if (idx < 0 || idx >= channels.length) return;
+  currentIndex = idx;
+  const ch = channels[idx];
+  renderChannelList();
+
+  const video = document.getElementById('video');
+  document.getElementById('placeholder').style.display = 'none';
+  video.style.display = 'block';
+  document.getElementById('now-playing').style.display = 'flex';
+  document.getElementById('np-name').textContent = ch.name;
+  document.getElementById('np-url').textContent = ch.url;
+  showInfoOverlay(ch);
+
+  if (hls) { hls.destroy(); hls = null; }
+
+  const url = ch.url;
+
+  if (Hls.isSupported() && (url.includes('.m3u8') || url.includes('hls') || !url.includes('.'))) {
+    hls = new Hls({ enableWorker: true, lowLatencyMode: true });
+    hls.loadSource(url);
+    hls.attachMedia(video);
+    hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      video.play().catch(() => {});
+      showLoading(false);
+    });
+    hls.on(Hls.Events.ERROR, (e, data) => {
+      if (data.fatal) {
+        showLoading(false);
+        showToast('⚠️ Akış yüklenemedi: ' + ch.name);
+      }
+    });
+    showLoading(true);
+  } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+    video.src = url;
+    video.addEventListener('loadedmetadata', () => video.play().catch(() => {}));
+    showLoading(false);
+  } else {
+    video.src = url;
+    video.play().catch(() => showToast('⚠️ Bu format desteklenmiyor'));
+    showLoading(false);
+  }
+}
+
+/* ─── INFO OVERLAY ─── */
+function showInfoOverlay(ch) {
+  const el = document.getElementById('info-overlay');
+  document.getElementById('info-ch').textContent = ch.name;
+  document.getElementById('info-grp').textContent = ch.group;
+  el.classList.add('show');
+  clearTimeout(infoTimer);
+  infoTimer = setTimeout(() => el.classList.remove('show'), 3000);
+}
+
+/* ─── PREV / NEXT ─── */
+function prevChannel() {
+  if (currentIndex > 0) playChannel(currentIndex - 1);
+  else playChannel(channels.length - 1);
+}
+function nextChannel() {
+  if (currentIndex < channels.length - 1) playChannel(currentIndex + 1);
+  else playChannel(0);
+}
+
+/* ─── CONTROLS ─── */
+function toggleMute() {
+  const v = document.getElementById('video');
+  v.muted = !v.muted;
+}
+function setVolume(val) {
+  document.getElementById('video').volume = val;
+}
+function toggleFullscreen() {
+  const wrap = document.getElementById('video-wrap');
+  if (!document.fullscreenElement) wrap.requestFullscreen().catch(() => {});
+  else document.exitFullscreen();
+}
+
+/* ─── LOADING ─── */
+function showLoading(show) {
+  document.getElementById('loading').classList.toggle('show', show);
+}
+
+/* ─── TOAST ─── */
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+/* ─── UTIL ─── */
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ─── KEYBOARD ─── */
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  if (e.key === 'ArrowUp') prevChannel();
+  if (e.key === 'ArrowDown') nextChannel();
+  if (e.key === 'f' || e.key === 'F') toggleFullscreen();
+  if (e.key === 'm' || e.key === 'M') toggleMute();
+});
+</script>
+</body>
+</html>
