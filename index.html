@@ -1,14 +1,252 @@
 <!doctype html>
-<html lang="en">
+<html lang="tr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dermo Denlife Estetik Güzellik Salonu</title>
-    <script type="module" crossorigin src="/assets/index-DBCHnkUY.js"></script>
-    <link rel="stylesheet" crossorigin href="/assets/index-CaPyoB6W.css">
+    <title>Dermo Denlife</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet" />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+      :root {
+        --cream: #f5f0e8;
+        --dark:  #1a1510;
+        --gold:  #b89a6a;
+        --gold2: #d4b896;
+        --tv:    #0d1117;
+        --tv-acc:#e63946;
+      }
+
+      #selector {
+        position: fixed; inset: 0;
+        display: flex;
+        z-index: 9999;
+        font-family: 'Montserrat', sans-serif;
+        overflow: hidden;
+      }
+
+      /* ── LEFT — WEB SİTESİ ── */
+      .side {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 28px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition: flex .6s cubic-bezier(.77,0,.18,1);
+      }
+      .side::after {
+        content: '';
+        position: absolute; inset: 0;
+        opacity: 0;
+        transition: opacity .4s;
+        pointer-events: none;
+      }
+      .side:hover { flex: 1.35; }
+      .side:hover::after { opacity: 1; }
+
+      /* WEB */
+      #side-web {
+        background: var(--cream);
+        border-right: 1px solid rgba(184,154,106,.3);
+      }
+      #side-web::after { background: radial-gradient(ellipse at center, rgba(184,154,106,.15) 0%, transparent 70%); }
+      #side-web .icon { font-size: 56px; filter: grayscale(.2); }
+      #side-web .label {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: clamp(22px, 3vw, 36px);
+        font-weight: 300;
+        color: var(--dark);
+        letter-spacing: 4px;
+        text-transform: uppercase;
+      }
+      #side-web .sub {
+        font-size: 11px;
+        letter-spacing: 3px;
+        color: var(--gold);
+        text-transform: uppercase;
+      }
+      #side-web .pill {
+        border: 1px solid var(--gold);
+        color: var(--gold);
+        padding: 10px 28px;
+        border-radius: 0;
+        font-size: 11px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        transition: background .3s, color .3s;
+        margin-top: 8px;
+      }
+      #side-web:hover .pill { background: var(--gold); color: var(--cream); }
+
+      /* TV */
+      #side-tv {
+        background: var(--tv);
+      }
+      #side-tv::after { background: radial-gradient(ellipse at center, rgba(230,57,70,.12) 0%, transparent 70%); }
+      #side-tv .icon { font-size: 56px; }
+      #side-tv .label {
+        font-family: 'Montserrat', sans-serif;
+        font-size: clamp(18px, 2.5vw, 30px);
+        font-weight: 500;
+        color: #f0f0f8;
+        letter-spacing: 6px;
+        text-transform: uppercase;
+      }
+      #side-tv .sub {
+        font-size: 11px;
+        letter-spacing: 3px;
+        color: var(--tv-acc);
+        text-transform: uppercase;
+      }
+      #side-tv .pill {
+        background: var(--tv-acc);
+        color: #fff;
+        padding: 10px 28px;
+        border-radius: 4px;
+        font-size: 11px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        transition: background .3s;
+        margin-top: 8px;
+        border: none;
+      }
+      #side-tv:hover .pill { background: #ff6b6b; }
+
+      /* ── DIVIDER ── */
+      .divider {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        width: 48px;
+        height: 48px;
+        background: #fff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--dark);
+        letter-spacing: 1px;
+        box-shadow: 0 4px 24px rgba(0,0,0,.18);
+        z-index: 10;
+        pointer-events: none;
+        font-family: 'Montserrat', sans-serif;
+      }
+
+      /* ── DECORATIVE LINES ── */
+      #side-web .deco {
+        position: absolute;
+        top: 30px; left: 30px;
+        width: 60px; height: 60px;
+        border-top: 1px solid var(--gold2);
+        border-left: 1px solid var(--gold2);
+        opacity: .5;
+      }
+      #side-web .deco2 {
+        position: absolute;
+        bottom: 30px; right: 30px;
+        width: 60px; height: 60px;
+        border-bottom: 1px solid var(--gold2);
+        border-right: 1px solid var(--gold2);
+        opacity: .5;
+      }
+
+      /* scan lines on TV side */
+      #side-tv .scanlines {
+        position: absolute; inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0,0,0,.08) 2px,
+          rgba(0,0,0,.08) 4px
+        );
+        pointer-events: none;
+      }
+
+      /* ── FADE OUT ── */
+      #selector.fade-out {
+        animation: fadeOut .5s forwards;
+      }
+      @keyframes fadeOut {
+        to { opacity: 0; pointer-events: none; }
+      }
+
+      /* ── HINT ── */
+      .hint {
+        position: absolute;
+        bottom: 24px;
+        font-size: 10px;
+        letter-spacing: 2px;
+        opacity: .35;
+        text-transform: uppercase;
+      }
+      #side-web .hint { color: var(--dark); }
+      #side-tv .hint  { color: #fff; }
+    </style>
   </head>
   <body>
+
+    <!-- SELECTOR OVERLAY -->
+    <div id="selector">
+
+      <!-- WEB SİTESİ -->
+      <div class="side" id="side-web" onclick="goWeb()">
+        <div class="deco"></div>
+        <div class="deco2"></div>
+        <div class="icon">🌿</div>
+        <div class="label">Dermo Denlife</div>
+        <div class="sub">Estetik &amp; Güzellik Salonu</div>
+        <div class="pill">Web Sitesine Git</div>
+        <div class="hint">Randevu · Hizmetler · İletişim</div>
+      </div>
+
+      <div class="divider">veya</div>
+
+      <!-- IPTV -->
+      <div class="side" id="side-tv" onclick="goIPTV()">
+        <div class="scanlines"></div>
+        <div class="icon">📺</div>
+        <div class="label">IPTV Pro</div>
+        <div class="sub">Canlı Yayın Platformu</div>
+        <div class="pill">IPTV'ye Git</div>
+        <div class="hint">M3U · HLS · Canlı Kanal</div>
+      </div>
+
+    </div>
+
+    <!-- REACT ROOT (web sitesi için) -->
     <div id="root"></div>
+
+    <script>
+      function goWeb() {
+        const sel = document.getElementById('selector');
+        sel.classList.add('fade-out');
+        setTimeout(() => {
+          sel.remove();
+          // React uygulamasını yükle
+          const s = document.createElement('script');
+          s.type = 'module';
+          s.src = '/assets/index-DBCHnkUY.js';
+          document.body.appendChild(s);
+        }, 500);
+      }
+
+      function goIPTV() {
+        const sel = document.getElementById('selector');
+        sel.classList.add('fade-out');
+        setTimeout(() => {
+          // IPTV sayfasına yönlendir
+          window.location.href = '/public/iptv.html';
+        }, 400);
+      }
+    </script>
   </body>
 </html>
-
