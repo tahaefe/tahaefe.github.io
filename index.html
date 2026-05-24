@@ -3,9 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dermo Denlife</title>
+    <title>Tahaefe - Portal</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Montserrat:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
     <style>
       *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -14,19 +14,26 @@
         --dark:  #1a1510;
         --gold:  #b89a6a;
         --gold2: #d4b896;
-        --tv:    #0d1117;
-        --tv-acc:#e63946;
+        --tv:    #050505;
+        --tv-acc:#00FFC2;
+      }
+
+      body {
+        background-color: var(--tv);
+        color: #f0f0f8;
+        overflow-x: hidden;
       }
 
       #selector {
-        position: fixed; inset: 0;
+        position: fixed;
+        inset: 0;
         display: flex;
         z-index: 9999;
         font-family: 'Montserrat', sans-serif;
         overflow: hidden;
       }
 
-      /* ── LEFT — WEB SİTESİ ── */
+      /* SPLIT SIDES */
       .side {
         flex: 1;
         display: flex;
@@ -41,7 +48,8 @@
       }
       .side::after {
         content: '';
-        position: absolute; inset: 0;
+        position: absolute;
+        inset: 0;
         opacity: 0;
         transition: opacity .4s;
         pointer-events: none;
@@ -49,12 +57,14 @@
       .side:hover { flex: 1.35; }
       .side:hover::after { opacity: 1; }
 
-      /* WEB */
+      /* WEB SIDE */
       #side-web {
         background: var(--cream);
         border-right: 1px solid rgba(184,154,106,.3);
       }
-      #side-web::after { background: radial-gradient(ellipse at center, rgba(184,154,106,.15) 0%, transparent 70%); }
+      #side-web::after {
+        background: radial-gradient(ellipse at center, rgba(184,154,106,.15) 0%, transparent 70%);
+      }
       #side-web .icon { font-size: 56px; filter: grayscale(.2); }
       #side-web .label {
         font-family: 'Cormorant Garamond', serif;
@@ -83,17 +93,19 @@
       }
       #side-web:hover .pill { background: var(--gold); color: var(--cream); }
 
-      /* TV */
+      /* TV SIDE */
       #side-tv {
         background: var(--tv);
       }
-      #side-tv::after { background: radial-gradient(ellipse at center, rgba(230,57,70,.12) 0%, transparent 70%); }
+      #side-tv::after {
+        background: radial-gradient(ellipse at center, rgba(0,255,194,.12) 0%, transparent 70%);
+      }
       #side-tv .icon { font-size: 56px; }
       #side-tv .label {
         font-family: 'Montserrat', sans-serif;
         font-size: clamp(18px, 2.5vw, 30px);
-        font-weight: 500;
-        color: #f0f0f8;
+        font-weight: 900;
+        color: #fff;
         letter-spacing: 6px;
         text-transform: uppercase;
       }
@@ -105,19 +117,24 @@
       }
       #side-tv .pill {
         background: var(--tv-acc);
-        color: #fff;
+        color: #000;
         padding: 10px 28px;
-        border-radius: 4px;
+        border-radius: 24px;
         font-size: 11px;
+        font-weight: 900;
         letter-spacing: 2px;
         text-transform: uppercase;
-        transition: background .3s;
+        transition: background .3s, transform .2s, box-shadow .3s;
         margin-top: 8px;
         border: none;
+        box-shadow: 0 0 15px rgba(0,255,194,0.3);
       }
-      #side-tv:hover .pill { background: #ff6b6b; }
+      #side-tv:hover .pill {
+        background: #00ffc2;
+        box-shadow: 0 0 25px rgba(0,255,194,0.6);
+        transform: scale(1.05);
+      }
 
-      /* ── DIVIDER ── */
       .divider {
         position: absolute;
         left: 50%;
@@ -140,7 +157,6 @@
         font-family: 'Montserrat', sans-serif;
       }
 
-      /* ── DECORATIVE LINES ── */
       #side-web .deco {
         position: absolute;
         top: 30px; left: 30px;
@@ -158,9 +174,9 @@
         opacity: .5;
       }
 
-      /* scan lines on TV side */
       #side-tv .scanlines {
-        position: absolute; inset: 0;
+        position: absolute;
+        inset: 0;
         background: repeating-linear-gradient(
           0deg,
           transparent,
@@ -171,7 +187,6 @@
         pointer-events: none;
       }
 
-      /* ── FADE OUT ── */
       #selector.fade-out {
         animation: fadeOut .5s forwards;
       }
@@ -179,7 +194,6 @@
         to { opacity: 0; pointer-events: none; }
       }
 
-      /* ── HINT ── */
       .hint {
         position: absolute;
         bottom: 24px;
@@ -191,21 +205,21 @@
       #side-web .hint { color: var(--dark); }
       #side-tv .hint  { color: #fff; }
     </style>
+    <script type="module" crossorigin src="./assets/index-CUTbvEf5.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-B6c_YorW.css">
   </head>
   <body>
-
     <!-- SELECTOR OVERLAY -->
     <div id="selector">
-
       <!-- WEB SİTESİ -->
       <div class="side" id="side-web" onclick="goWeb()">
         <div class="deco"></div>
         <div class="deco2"></div>
-        <div class="icon">🌿</div>
+        <div class="icon">🌸</div>
         <div class="label">Dermo Denlife</div>
-        <div class="sub">Estetik &amp; Güzellik Salonu</div>
+        <div class="sub">Estetik & Güzellik Salonu</div>
         <div class="pill">Web Sitesine Git</div>
-        <div class="hint">Randevu · Hizmetler · İletişim</div>
+        <div class="hint">Randevu • Hizmetler • İletişim</div>
       </div>
 
       <div class="divider">veya</div>
@@ -214,38 +228,32 @@
       <div class="side" id="side-tv" onclick="goIPTV()">
         <div class="scanlines"></div>
         <div class="icon">📺</div>
-        <div class="label">IPTV Pro</div>
+        <div class="label">IPTV WEB Pro</div>
         <div class="sub">Canlı Yayın Platformu</div>
         <div class="pill">IPTV'ye Git</div>
-        <div class="hint">M3U · HLS · Canlı Kanal</div>
+        <div class="hint">M3U • HLS • Canlı Kanal</div>
       </div>
-
     </div>
 
-    <!-- REACT ROOT (web sitesi için) -->
+    <!-- REACT ROOT -->
     <div id="root"></div>
+
 
     <script>
       function goWeb() {
         const sel = document.getElementById('selector');
         sel.classList.add('fade-out');
         setTimeout(() => {
-          sel.remove();
-          // React uygulamasını yükle
-          const s = document.createElement('script');
-          s.type = 'module';
-          s.src = '/assets/index-DBCHnkUY.js';
-          document.body.appendChild(s);
-        }, 500);
+          window.location.href = 'https://tahaefe.com.tr';
+        }, 400);
       }
 
       function goIPTV() {
         const sel = document.getElementById('selector');
         sel.classList.add('fade-out');
         setTimeout(() => {
-          // IPTV sayfasına yönlendir
-          window.location.href = '/public/iptv.html';
-        }, 400);
+          sel.remove();
+        }, 500);
       }
     </script>
   </body>
